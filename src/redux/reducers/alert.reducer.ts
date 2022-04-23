@@ -1,6 +1,11 @@
 import { produce } from "immer";
 import ACTIONS from "../constants/types";
 
+export interface IAlert {
+  config: {},
+  isActive: false,
+}
+
 const alert = produce((draft, action) => {
   switch (action.type) {
     case ACTIONS.SHOW_ALERT:
