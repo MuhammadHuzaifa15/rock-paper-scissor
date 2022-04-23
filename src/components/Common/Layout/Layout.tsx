@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 import { Layout as AntdLayout, Menu } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 
 import { Menus } from "../../../utils/constants";
-
-import { Button } from "..";
 
 import "./styles/Layout.scss";
 import { Alert } from "..";
@@ -20,21 +18,8 @@ const Layout = function ({ children }: { children: JSX.Element }) {
     }),
     shallowEqual
   );
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-    Boolean(localStorage.getItem("token"))
-  );
 
   const location = useLocation();
-
-  const login = () => {
-    localStorage.setItem("token", "token");
-    setIsLoggedIn(true);
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-  };
 
   return (
     <AntdLayout className="layout">
@@ -53,17 +38,6 @@ const Layout = function ({ children }: { children: JSX.Element }) {
               </Menu.Item>
             ))}
           </Menu>
-          <div className="log-btn">
-            {isLoggedIn ? (
-              <Button type="primary" onClick={logout}>
-                Logout
-              </Button>
-            ) : (
-              <Button type="primary" onClick={login}>
-                Login
-              </Button>
-            )}
-          </div>
         </div>
       </Header>
       {isActive && <Alert {...config} />}
@@ -73,7 +47,7 @@ const Layout = function ({ children }: { children: JSX.Element }) {
       <Footer
         style={{ textAlign: "center", background: "#001529", color: "white" }}
       >
-        Polygon Canvas Created by Huzaifa
+        Rock Paper and Scissors Created by Huzaifa
       </Footer>
     </AntdLayout>
   );
