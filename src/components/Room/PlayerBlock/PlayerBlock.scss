@@ -1,0 +1,35 @@
+.player-block {
+  width: 50%;
+  box-sizing: content-box;
+  padding: 10px;
+  text-align: center;
+  .title {
+    margin-bottom: 20px;
+  }
+  .score {
+    margin-bottom: 20px;
+  }
+  .choices-block {
+    .choices {
+      margin: 0px auto;
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .choice-block {
+    margin: 0px auto;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+  }
+  .choice {
+    img {
+      height: 20vh;
+      display: block;
+    }
+  }
+  .subtitle {
+    margin: 20px 5px;
+  }
+}

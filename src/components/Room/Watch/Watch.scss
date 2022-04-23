@@ -1,0 +1,20 @@
+.cmp-watch {
+  .header {
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-between;
+    .round-title {
+      text-align: center;
+      width: 200px;
+    }
+  }
+  .result-block {
+    text-align: center;
+    width: 200px;
+    margin: 10px auto;
+  }
+  .players-block {
+    display: flex;
+    justify-content: space-between;
+  }
+}

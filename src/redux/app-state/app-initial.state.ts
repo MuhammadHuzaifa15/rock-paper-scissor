@@ -4,7 +4,7 @@ export const AppInitialState = {
     isActive: false,
   },
   room: {
-    type: ''
+    roomType: ''
   }
 };
 

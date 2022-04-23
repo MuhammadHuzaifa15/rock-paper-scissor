@@ -7,14 +7,17 @@ export const choicesArray = ['rock', 'paper', 'scissors'];
 export const choices = [
   {
     key: "rock",
-    value: "Rock"
+    value: "Rock",
+    image: 'rock.svg'
   },
   {
     key: "paper",
-    value: "Paper"
+    value: "Paper",
+    image: 'paper.svg'
   },
   {
     key: "scissors",
-    value: "Scissors"
+    value: "Scissors",
+    image: 'scissors.svg'
   }
 ];

@@ -5,8 +5,8 @@ export const randomGenerator = (limit: number) => {
     return Math.floor(Math.random() * limit);
 }
 
-export const getRandomChoice = (): string => {
-    return choices[randomGenerator(choices.length)].key
+export const getRandomChoice = (): IChoices => {
+    return choices[randomGenerator(choices.length)].key as IChoices
 }
 
 export const rules = new Map<string, string>([
