@@ -4,6 +4,7 @@ import "./PlayerBlock.scss";
 import { useCallback } from "react";
 import { choices } from "../../../utils/constants";
 import { Loader } from "../../Common/Loader";
+import { Card } from "antd";
 
 const PlayerBlock = (props: IPlayerBlock) => {
   const {
@@ -14,6 +15,7 @@ const PlayerBlock = (props: IPlayerBlock) => {
     showChoice = false,
     choice = "",
     isOpponent = false,
+    choosePick,
   } = props;
 
   const renderChoicesBlock = useCallback(() => {
@@ -27,6 +29,7 @@ const PlayerBlock = (props: IPlayerBlock) => {
                 <img
                   alt={value}
                   src={require(`../../../assets/svgs/${image}`)}
+                  onClick={() => choosePick && choosePick(key)}
                 />
               </div>
             );
@@ -34,7 +37,7 @@ const PlayerBlock = (props: IPlayerBlock) => {
         </div>
       </div>
     );
-  }, []);
+  }, [choosePick]);
 
   const renderChoiceBlock = useCallback(() => {
     const choiceOption = choices.find((c) => c.key === choice);
@@ -55,10 +58,6 @@ const PlayerBlock = (props: IPlayerBlock) => {
 
   const renderOpponentBlock = useCallback(() => {
     return isChosen ? (
-      <div>
-        <Loader />
-      </div>
-    ) : (
       <div className="choice-block">
         <div className="choice">
           <img
@@ -67,17 +66,25 @@ const PlayerBlock = (props: IPlayerBlock) => {
           />
         </div>
       </div>
+    ) : (
+      <div className="choice-block">
+        <Loader />
+      </div>
     );
   }, [isChosen]);
 
   return (
     <div className="player-block">
-      <h2 className="title">{title}</h2>
-      <h3 className="score">Score {score}</h3>
-      {showChoice && !isChosen && renderChoicesBlock()}
-      {isChosen && !showChoice && renderChoiceBlock()}
-      {isOpponent && renderOpponentBlock()}
-      <p className="subtitle">{subtitle}</p>
+      <Card
+        title={title}
+        extra={`Score ${score}`}
+        actions={[<p className="subtitle">{subtitle}</p>]}
+        bordered={false}
+      >
+        {showChoice && !isChosen && !isOpponent && renderChoicesBlock()}
+        {isChosen && !showChoice && !isOpponent && renderChoiceBlock()}
+        {isOpponent && renderOpponentBlock()}
+      </Card>
     </div>
   );
 };

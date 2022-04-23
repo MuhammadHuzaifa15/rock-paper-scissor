@@ -1,41 +1,42 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { Button } from "antd";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PlayerBlock, IPlayerBlock } from "..";
+import { IPlayerBlock, PlayerBlock } from "..";
 import { evaluate, getRandomChoice } from "../../../utils/script";
-import { Button } from "../../Common";
+import { IChoices } from "../../../utils/types";
 
-import "./Watch.scss";
+import "./Play.scss";
 
-const delay = 3000;
+const delay = 1000;
 const firstPlayerInitialState: IPlayerBlock = {
-  title: "Player 1",
-  subtitle: "Player 1 is choosing pick",
+  title: "You",
+  subtitle: "Choose your pick",
   score: 0,
   isChosen: false,
   showChoice: true,
 };
 const secondPlayerInitialState: IPlayerBlock = {
-  title: "Player 2",
-  subtitle: "Player 2 is choosing pick",
+  title: "Opponent",
+  subtitle: "Opponent is choosing pick",
   score: 0,
   isChosen: false,
-  showChoice: true,
+  showChoice: false,
 };
 
-const Watch = () => {
+const Play = () => {
   const navigate = useNavigate();
   const [round, setRound] = useState(0);
   const [ties, setTies] = useState(0);
+
+  const [result, setResult] = useState("");
+  const [roundCompleted, setRoundCompleted] = useState(false);
+  const [matchCompleted, setMatchCompleted] = useState(false);
 
   const [firstPlayer, setFirstPlayer] = useState(firstPlayerInitialState);
   const [firstPlayerScore, setFirstPlayerScore] = useState(0);
 
   const [secondPlayer, setSecondPlayer] = useState(secondPlayerInitialState);
   const [secondPlayerScore, setSecondPlayerScore] = useState(0);
-
-  const [result, setResult] = useState("");
-  const [roundCompleted, setRoundCompleted] = useState(false);
-  const [matchCompleted, setMatchCompleted] = useState(false);
 
   const [matchTimeoutState, setMatchTimeoutState] =
     useState<NodeJS.Timeout | null>(null);
@@ -49,34 +50,16 @@ const Watch = () => {
     setRound(round + 1);
     setPlayersTimeoutState(
       setTimeout(() => {
-        setFirstPlayer({
-          ...firstPlayerInitialState,
-          choice: getRandomChoice(),
-          isChosen: true,
-          showChoice: false,
-          subtitle: "Player 1 made a pick",
-        });
         setSecondPlayer({
           ...secondPlayerInitialState,
           choice: getRandomChoice(),
           isChosen: true,
           showChoice: false,
-          subtitle: "Player 2 made a pick",
+          subtitle: "Opponent made a pick",
         });
       }, delay)
     );
   }, [round]);
-
-  useEffect(() => {
-    if (roundCompleted) {
-      if (firstPlayerScore < 3 && secondPlayerScore < 3) {
-        setMatchTimeoutState(setTimeout(startRound, 5000));
-      } else {
-        setMatchCompleted(true);
-      }
-      setRoundCompleted(false);
-    }
-  }, [firstPlayerScore, roundCompleted, secondPlayerScore, startRound]);
 
   useEffect(() => {
     startRound();
@@ -84,11 +67,15 @@ const Watch = () => {
   }, []);
 
   useEffect(() => {
-    return () => {
-      if (matchTimeoutState) clearTimeout(matchTimeoutState);
-      if (playersTimeoutState) clearTimeout(playersTimeoutState);
-    };
-  }, [matchTimeoutState, playersTimeoutState]);
+    if (roundCompleted) {
+      if (firstPlayerScore < 3 && secondPlayerScore < 3) {
+        setMatchTimeoutState(setTimeout(startRound, 2000));
+      } else {
+        setMatchCompleted(true);
+      }
+      setRoundCompleted(false);
+    }
+  }, [firstPlayerScore, roundCompleted, secondPlayerScore, startRound]);
 
   const evaluateResults = useCallback(() => {
     if (firstPlayer.choice && secondPlayer.choice) {
@@ -98,10 +85,10 @@ const Watch = () => {
         resultMessage = "TIE!";
         setTies(ties + 1);
       } else if (result === firstPlayer.choice) {
-        resultMessage = "Player 1 wins!";
+        resultMessage = "You wins!";
         setFirstPlayerScore(firstPlayerScore + 1);
       } else {
-        resultMessage = "Player 2 wins!";
+        resultMessage = "Opponent wins!";
         setSecondPlayerScore(secondPlayerScore + 1);
       }
       setResult(resultMessage);
@@ -122,12 +109,32 @@ const Watch = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firstPlayer.choice, secondPlayer.choice]);
 
-  const stopWatching = () => {
+  useEffect(() => {
+    return () => {
+      if (matchTimeoutState) clearTimeout(matchTimeoutState);
+      if (playersTimeoutState) clearTimeout(playersTimeoutState);
+    };
+  }, [matchTimeoutState, playersTimeoutState]);
+
+  const stopPlaying = () => {
     navigate("/");
   };
 
+  const choosePick = useCallback(
+    (choice: IChoices) => {
+      setFirstPlayer({
+        ...firstPlayer,
+        choice,
+        isChosen: true,
+        showChoice: false,
+        subtitle: "You made a pick",
+      });
+    },
+    [firstPlayer]
+  );
+
   return (
-    <div className="cmp-watch">
+    <div className="cmp-play">
       <div className="header">
         <h1 className="round-title">ROUND {round}</h1>
         <h1>{result}</h1>
@@ -137,21 +144,22 @@ const Watch = () => {
         <div className="players-block">
           <PlayerBlock
             {...firstPlayer}
+            choosePick={choosePick}
             score={firstPlayerScore}
             isOpponent={false}
           />
           <PlayerBlock
             {...secondPlayer}
+            isOpponent={true}
             score={secondPlayerScore}
-            isOpponent={false}
           />
         </div>
       )}
       <div className="btn-block">
-        <Button onClick={stopWatching}>Stop Watching</Button>
+        <Button onClick={stopPlaying}>Stop Playing</Button>
       </div>
     </div>
   );
 };
 
-export default Watch;
+export default Play;

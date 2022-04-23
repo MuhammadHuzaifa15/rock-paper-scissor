@@ -8,4 +8,5 @@ export interface IPlayerBlock {
     choice?: IChoices;
     showChoice?: boolean;
     isOpponent?: boolean;
+    choosePick?: (choice: IChoices) => void
 }

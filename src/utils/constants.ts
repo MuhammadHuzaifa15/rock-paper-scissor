@@ -1,10 +1,12 @@
+import { IChoices } from "./types";
+
 export const Menus = [
   { name: "Home", key: "home", path: "/" },
 ];
 
 export const choicesArray = ['rock', 'paper', 'scissors'];
 
-export const choices = [
+export const choices: { key: IChoices, value: string, image: string }[] = [
   {
     key: "rock",
     value: "Rock",

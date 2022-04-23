@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components/Common/Loader";
-import { Watch } from "../../components/Room";
+import { Play, Watch } from "../../components/Room";
 
 import "./Room.scss";
 
@@ -31,7 +31,7 @@ const Home = function () {
       {!loading ? (
         <div>
           {roomType === "watch" && <Watch />}
-          {roomType === "play" && <h1>Room</h1>}
+          {roomType === "play" && <Play />}
         </div>
       ) : (
         <Loader />
