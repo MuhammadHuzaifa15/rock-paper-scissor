@@ -1,0 +1,1 @@
+export type IChoices = 'rock' | 'paper' | 'scissors'
