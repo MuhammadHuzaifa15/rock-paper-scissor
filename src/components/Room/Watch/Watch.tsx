@@ -12,14 +12,14 @@ const firstPlayerInitialState: IPlayerBlock = {
   subtitle: "Player 1 is choosing pick",
   score: 0,
   isChosen: false,
-  showChoice: true,
+  showChoices: true,
 };
 const secondPlayerInitialState: IPlayerBlock = {
   title: "Player 2",
   subtitle: "Player 2 is choosing pick",
   score: 0,
   isChosen: false,
-  showChoice: true,
+  showChoices: true,
 };
 
 const Watch = () => {
@@ -53,14 +53,16 @@ const Watch = () => {
           ...firstPlayerInitialState,
           choice: getRandomChoice(),
           isChosen: true,
-          showChoice: false,
+          showChosen: true,
+          showChoices: false,
           subtitle: "Player 1 made a pick",
         });
         setSecondPlayer({
           ...secondPlayerInitialState,
           choice: getRandomChoice(),
           isChosen: true,
-          showChoice: false,
+          showChoices: false,
+          showChosen: true,
           subtitle: "Player 2 made a pick",
         });
       }, delay)
@@ -73,6 +75,8 @@ const Watch = () => {
         setMatchTimeoutState(setTimeout(startRound, 5000));
       } else {
         setMatchCompleted(true);
+        if (firstPlayerScore === 3) setResult("Game Ended! Player 1 wins.");
+        if (secondPlayerScore === 3) setResult("Game Ended! Player 2 wins.");
       }
       setRoundCompleted(false);
     }
@@ -133,22 +137,24 @@ const Watch = () => {
         <h1>{result}</h1>
         <h1 className="round-title">Total ties: {ties}</h1>
       </div>
-      {!matchCompleted && (
-        <div className="players-block">
-          <PlayerBlock
-            {...firstPlayer}
-            score={firstPlayerScore}
-            isOpponent={false}
-          />
-          <PlayerBlock
-            {...secondPlayer}
-            score={secondPlayerScore}
-            isOpponent={false}
-          />
-        </div>
-      )}
+
+      <div className="players-block">
+        <PlayerBlock
+          {...firstPlayer}
+          score={firstPlayerScore}
+          isOpponent={false}
+        />
+        <PlayerBlock
+          {...secondPlayer}
+          score={secondPlayerScore}
+          isOpponent={false}
+        />
+      </div>
+
       <div className="btn-block">
-        <Button onClick={stopWatching}>Stop Watching</Button>
+        <Button onClick={stopWatching}>
+          {matchCompleted ? "Go home" : "Stop Watching"}
+        </Button>
       </div>
     </div>
   );

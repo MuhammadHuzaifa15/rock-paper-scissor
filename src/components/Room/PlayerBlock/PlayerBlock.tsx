@@ -12,7 +12,8 @@ const PlayerBlock = (props: IPlayerBlock) => {
     subtitle,
     score,
     isChosen,
-    showChoice = false,
+    showChosen = false,
+    showChoices = false,
     choice = "",
     isOpponent = false,
     choosePick,
@@ -41,6 +42,7 @@ const PlayerBlock = (props: IPlayerBlock) => {
 
   const renderChoiceBlock = useCallback(() => {
     const choiceOption = choices.find((c) => c.key === choice);
+
     if (!choiceOption) {
       return null;
     }
@@ -81,9 +83,9 @@ const PlayerBlock = (props: IPlayerBlock) => {
         actions={[<p className="subtitle">{subtitle}</p>]}
         bordered={false}
       >
-        {showChoice && !isChosen && !isOpponent && renderChoicesBlock()}
-        {isChosen && !showChoice && !isOpponent && renderChoiceBlock()}
-        {isOpponent && renderOpponentBlock()}
+        {showChoices && !isChosen && renderChoicesBlock()}
+        {isChosen && showChosen && renderChoiceBlock()}
+        {isOpponent && (!isChosen || !showChosen) && renderOpponentBlock()}
       </Card>
     </div>
   );

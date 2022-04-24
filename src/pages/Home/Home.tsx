@@ -25,6 +25,25 @@ const Home = function () {
           Play with computer
         </Button>
         <Button onClick={() => createRoom("watch")}>Watch a Match</Button>
+        <br />
+        <br />
+        <h2>Rules:</h2>
+        <ul>
+          <li>If players show the same things, they go again.</li>
+          <li>
+            If one player picks rock and one scissors, the player who showed
+            rock wins the dispute. To explain this, say rock crushes scissors
+            (no need to actually crush).
+          </li>
+          <li>
+            If one player picks scissors and the other paper, the player who
+            showed scissors succeeds. Scissors cuts paper.
+          </li>
+          <li>
+            If a player shows paper while the other shows rock, the player who
+            picked paper succeeds. Paper covers rock.
+          </li>
+        </ul>
       </Card>
     </div>
   );

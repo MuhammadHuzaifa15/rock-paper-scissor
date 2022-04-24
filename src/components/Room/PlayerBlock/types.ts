@@ -6,7 +6,8 @@ export interface IPlayerBlock {
     score: number;
     isChosen: boolean;
     choice?: IChoices;
-    showChoice?: boolean;
+    showChoices?: boolean;
     isOpponent?: boolean;
+    showChosen?: boolean;
     choosePick?: (choice: IChoices) => void
 }

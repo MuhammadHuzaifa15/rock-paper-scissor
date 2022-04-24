@@ -13,14 +13,14 @@ const firstPlayerInitialState: IPlayerBlock = {
   subtitle: "Choose your pick",
   score: 0,
   isChosen: false,
-  showChoice: true,
+  showChoices: true,
 };
 const secondPlayerInitialState: IPlayerBlock = {
   title: "Opponent",
   subtitle: "Opponent is choosing pick",
   score: 0,
   isChosen: false,
-  showChoice: false,
+  showChoices: false,
 };
 
 const Play = () => {
@@ -37,6 +37,7 @@ const Play = () => {
 
   const [secondPlayer, setSecondPlayer] = useState(secondPlayerInitialState);
   const [secondPlayerScore, setSecondPlayerScore] = useState(0);
+  const [secondPlayerShowChosen, setSecondPlayerShowChosen] = useState(false);
 
   const [matchTimeoutState, setMatchTimeoutState] =
     useState<NodeJS.Timeout | null>(null);
@@ -47,6 +48,7 @@ const Play = () => {
     setResult("");
     setFirstPlayer(firstPlayerInitialState);
     setSecondPlayer(secondPlayerInitialState);
+    setSecondPlayerShowChosen(false);
     setRound(round + 1);
     setPlayersTimeoutState(
       setTimeout(() => {
@@ -54,7 +56,7 @@ const Play = () => {
           ...secondPlayerInitialState,
           choice: getRandomChoice(),
           isChosen: true,
-          showChoice: false,
+          showChoices: false,
           subtitle: "Opponent made a pick",
         });
       }, delay)
@@ -72,6 +74,8 @@ const Play = () => {
         setMatchTimeoutState(setTimeout(startRound, 2000));
       } else {
         setMatchCompleted(true);
+        if (firstPlayerScore === 3) setResult("Congratulations! You win.");
+        if (secondPlayerScore === 3) setResult("Game Ended! Opponent wins.");
       }
       setRoundCompleted(false);
     }
@@ -126,9 +130,11 @@ const Play = () => {
         ...firstPlayer,
         choice,
         isChosen: true,
-        showChoice: false,
+        showChoices: false,
+        showChosen: true,
         subtitle: "You made a pick",
       });
+      setSecondPlayerShowChosen(true);
     },
     [firstPlayer]
   );
@@ -140,23 +146,26 @@ const Play = () => {
         <h1>{result}</h1>
         <h1 className="round-title">Total ties: {ties}</h1>
       </div>
-      {!matchCompleted && (
-        <div className="players-block">
-          <PlayerBlock
-            {...firstPlayer}
-            choosePick={choosePick}
-            score={firstPlayerScore}
-            isOpponent={false}
-          />
-          <PlayerBlock
-            {...secondPlayer}
-            isOpponent={true}
-            score={secondPlayerScore}
-          />
-        </div>
-      )}
+
+      <div className="players-block">
+        <PlayerBlock
+          {...firstPlayer}
+          choosePick={choosePick}
+          score={firstPlayerScore}
+          isOpponent={false}
+        />
+        <PlayerBlock
+          {...secondPlayer}
+          isOpponent={true}
+          showChosen={secondPlayerShowChosen}
+          score={secondPlayerScore}
+        />
+      </div>
+
       <div className="btn-block">
-        <Button onClick={stopPlaying}>Stop Playing</Button>
+        <Button onClick={stopPlaying}>
+          {matchCompleted ? "Go home" : "Stop Playing"}
+        </Button>
       </div>
     </div>
   );
