@@ -43,6 +43,7 @@ const Home = function () {
             If a player shows paper while the other shows rock, the player who
             picked paper succeeds. Paper covers rock.
           </li>
+          <li>Game will be ended if any player score 3 points.</li>
         </ul>
       </Card>
     </div>
