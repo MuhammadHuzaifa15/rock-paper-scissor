@@ -47,7 +47,7 @@ const Layout = function ({ children }: { children: JSX.Element }) {
       <Footer
         style={{ textAlign: "center", background: "#001529", color: "white" }}
       >
-        Rock Paper and Scissors Created by Huzaifa
+        Rock, Paper and Scissors Created by Huzaifa
       </Footer>
     </AntdLayout>
   );
